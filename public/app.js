@@ -169,6 +169,21 @@ async function renderArticle(path) {
   });
 }
 
+// 初始化WebSocket连接
+const socket = new WebSocket(`ws://${window.location.host}`);
+
+// 监听WebSocket消息
+socket.addEventListener('message', (event) => {
+  const data = JSON.parse(event.data);
+  if (data.type === 'filetree-update') {
+    // 文件树有更新，重新渲染界面
+    renderNavTabs();
+    if (currentTab === 'home') {
+      renderSidebar();
+    }
+  }
+});
+
 // 初始化
 renderNavTabs();
 renderSidebar();

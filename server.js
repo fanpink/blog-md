@@ -2,6 +2,7 @@ const express = require('express');
 const chokidar = require('chokidar');
 const fs = require('fs');
 const path = require('path');
+const WebSocket = require('ws');
 
 const app = express();
 const PORT = 5609; // 群晖Web Station推荐端口范围8000-9000
@@ -66,11 +67,24 @@ function generateFileTree() {
 // 初始化文件树
 generateFileTree();
 
+// 创建HTTP服务器
+const server = app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+// 创建WebSocket服务器
+const wss = new WebSocket.Server({ server });
+
+// 广播文件树更新通知
+function broadcastUpdate() {
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ type: 'filetree-update' }));
+    }
+  });
+}
+
 // 监听文件变化
-// const watcher = chokidar.watch(contentsPath, {
-//   ignored: /(^|[\/\\])\../, // 忽略隐藏文件
-//   persistent: true
-// });
 const watcher = chokidar.watch(contentsPath, {
   ignored: /(^|[\/\\])\../, // 忽略隐藏文件
   persistent: true,
@@ -79,12 +93,19 @@ const watcher = chokidar.watch(contentsPath, {
 });
 
 watcher
-  .on('add', path => generateFileTree())
-  .on('unlink', path => generateFileTree())
-  .on('addDir', path => generateFileTree())
-  .on('unlinkDir', path => generateFileTree());
-
-// 启动服务器
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+  .on('add', path => {
+    generateFileTree();
+    broadcastUpdate();
+  })
+  .on('unlink', path => {
+    generateFileTree();
+    broadcastUpdate();
+  })
+  .on('addDir', path => {
+    generateFileTree();
+    broadcastUpdate();
+  })
+  .on('unlinkDir', path => {
+    generateFileTree();
+    broadcastUpdate();
+  });
