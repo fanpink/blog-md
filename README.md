@@ -26,14 +26,16 @@ node server.js
 
 ## 访问方式
 
-- 服务端口：**8088**
-- 访问地址：http://localhost:8088
+- 服务端口：**5609**
+- 访问地址：http://localhost:5609
 
 ### 目录说明
 
 - `public/`：静态资源目录，可直接通过浏览器访问
 - `contents/`：存放 Markdown 文件的目录，支持多级子目录
 - `config/`：存放自动生成的 `tree.json` 文件
+- 'images/'：存放图片的目录，支持多级子目录
+
 
 ### 自动生成内容树
 
