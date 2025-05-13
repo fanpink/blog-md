@@ -1,0 +1,64 @@
+{
+  "name": "contents",
+  "type": "directory",
+  "children": [
+    {
+      "name": "example.md",
+      "type": "file",
+      "path": "example.md"
+    },
+    {
+      "name": "代码显示测试.md",
+      "type": "file",
+      "path": "代码显示测试.md"
+    },
+    {
+      "name": "图文",
+      "type": "directory",
+      "children": [
+        {
+          "name": "图文测试.md",
+          "type": "file",
+          "path": "图文/图文测试.md"
+        }
+      ]
+    },
+    {
+      "name": "学习",
+      "type": "directory",
+      "children": [
+        {
+          "name": "学习.md",
+          "type": "file",
+          "path": "学习/学习.md"
+        },
+        {
+          "name": "测试.md",
+          "type": "file",
+          "path": "学习/测试.md"
+        }
+      ]
+    },
+    {
+      "name": "技术",
+      "type": "directory",
+      "children": [
+        {
+          "name": "gitea配置记录.md",
+          "type": "file",
+          "path": "技术/gitea配置记录.md"
+        },
+        {
+          "name": "latex测试.md",
+          "type": "file",
+          "path": "技术/latex测试.md"
+        },
+        {
+          "name": "技术.md",
+          "type": "file",
+          "path": "技术/技术.md"
+        }
+      ]
+    }
+  ]
+}
