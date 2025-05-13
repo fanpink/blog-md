@@ -114,12 +114,43 @@ async function renderSidebar() {
 // 渲染文章内容
 async function renderArticle(path) {
   const content = await fetchArticle(path);
-  
+
+  // 配置marked保留mermaid代码块
+  marked.setOptions({
+    langPrefix: 'language-',
+    highlight: function(code, lang) {
+      // 让Prism跳过mermaid代码块
+      if (lang === 'mermaid') {
+        return code;
+      }
+      return Prism.highlight(code, Prism.languages[lang] || Prism.languages.markup, lang);
+    }
+  });
+
   // 解析Markdown
-  const html = marked.parse(content);
-  
+  let html = marked.parse(content);
+
+  // 替换mermaid代码块为<div class="mermaid">
+  html = html.replace(/<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g, (match, p1) => {
+    // 解码HTML实体
+    const code = p1.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    return `<div class="mermaid">${code}</div>`;
+  });
+
   // 渲染到页面
   mainContent.innerHTML = html;
+
+  // 手动初始化mermaid
+  if (window.mermaid) {
+    try {
+      mermaid.init({
+        startOnLoad: false,
+        theme: 'default'
+      }, document.querySelectorAll('.mermaid'));
+    } catch (e) {
+      console.error('Mermaid初始化失败:', e);
+    }
+  }
   
   // 生成目录导航
   const tocSidebar = document.getElementById('tocSidebar');
