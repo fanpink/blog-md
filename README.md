@@ -1,4 +1,4 @@
-# blog-md-trae-cn
+# blog-md
 
 本项目是一个基于 Node.js + Express 的 Markdown 博客内容管理服务。  
 主要功能为：  
