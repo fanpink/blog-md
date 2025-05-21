@@ -8,6 +8,11 @@
       "path": "example.md"
     },
     {
+      "name": "index.md",
+      "type": "file",
+      "path": "index.md"
+    },
+    {
       "name": "代码显示测试.md",
       "type": "file",
       "path": "代码显示测试.md"

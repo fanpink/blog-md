@@ -35,6 +35,7 @@ async function renderNavTabs() {
     homeTab.classList.add('active');
     currentTab = 'home';
     renderSidebar();
+    renderArticle('index.md');
   });
   navTabs.appendChild(homeTab);
   
@@ -218,3 +219,4 @@ socket.addEventListener('message', (event) => {
 // 初始化
 renderNavTabs();
 renderSidebar();
+renderArticle('index.md');
