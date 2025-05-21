@@ -16,32 +16,38 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      /* overflow: hidden; */
+      background-color: #0d1117; /* GitHub dark background */
+      color: #c9d1d9; /* GitHub dark text */
       }
     .nav-tabs {
       display: flex;
-      background: #f0f0f0;
-      padding: 10px;
+      background: #161b22; /* GitHub dark header background */
+      padding: 5px;
+      border-bottom: 1px solid #30363d; /* GitHub border color */
     }
     .nav-tab {
       padding: 10px 20px;
       cursor: pointer;
       transition: all 0.3s;
+      color: #c9d1d9;
     }
     .nav-tab.active {
-      background-color: #f0f0f0;
+      background-color: #0d1117; /* Match body background or slightly different */
       font-weight: bold;
-      border-bottom: 2px solid #0078d7;
+      border-bottom: 2px solid #58a6ff; /* GitHub blue accent */
+      color: #58a6ff;
     }
     .content-area {
       display: flex;
-      height: calc(100vh - 86px);
+      height: calc(100vh - 87px); /* Adjusted for border */
     }
     .toc-sidebar {
       width: 200px;
-      border-left: 1px solid #ddd;
+      border-left: 1px solid #30363d; /* GitHub border color */
       padding: 20px;
       overflow-y: auto;
+      background-color: #161b22; /* GitHub dark panel background */
     }
     .toc-item {
       padding: 5px 10px;
@@ -49,29 +55,32 @@
       cursor: pointer;
       border-radius: 4px;
       font-size: 0.9em;
+      color: #c9d1d9;
     }
     .toc-item:hover {
-      background-color: #f0f0f0;
+      background-color: #21262d; /* GitHub hover color */
     }
     .toc-item.active {
-      background-color: #0078d7;
-      color: white;
+      background-color: #58a6ff; /* GitHub blue accent */
+      color: #ffffff; /* White text on active */
     }
     .sidebar {
       width: 250px;
-      border-right: 1px solid #ddd;
+      border-right: 1px solid #30363d; /* GitHub border color */
       padding: 20px;
       overflow-y: auto;
+      background-color: #161b22; /* GitHub dark panel background */
     }
     .main-content {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
+      background-color: #0d1117; /* GitHub dark main content background */
     }
     .category-title {
       font-weight: bold;
       margin: 15px 0 5px 0;
-      color: #0078d7;
+      color: #58a6ff; /* GitHub blue accent for titles */
       font-size: 1.1em;
     }
     .article-link {
@@ -79,19 +88,21 @@
       margin: 2px 0;
       cursor: pointer;
       border-radius: 4px;
+      color: #c9d1d9;
     }
     .article-link:hover {
-      background-color: #f0f0f0;
+      background-color: #21262d; /* GitHub hover color */
     }
     .article-link.active {
-      background-color: #0078d7;
-      color: white;
+      background-color: #58a6ff; /* GitHub blue accent */
+      color: #ffffff; /* White text on active */
     }
   </style>
 </head>
 <body>
   <div class="nav-tabs" id="navTabs">
     <div class="nav-tab active" data-tab="home">首页</div>
+    <div class="nav-tab" data-tab="org" style="margin-left: auto;">绥江县防震减灾局</div>
   </div>
   
   <div class="content-area">

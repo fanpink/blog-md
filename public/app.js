@@ -55,6 +55,21 @@ async function renderNavTabs() {
       navTabs.appendChild(tab);
     }
   });
+
+  // 添加机构标签
+  const orgTab = document.createElement('div');
+  orgTab.className = 'nav-tab';
+  orgTab.textContent = '绥江县防震减灾局';
+  orgTab.style.marginLeft = 'auto';
+  orgTab.dataset.tab = 'home';
+  orgTab.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    document.querySelector('.nav-tab[data-tab="home"]').classList.add('active');
+    currentTab = 'home';
+    renderSidebar();
+    renderArticle('index.md');
+  });
+  navTabs.appendChild(orgTab);
 }
 
 // 渲染侧边栏导航
@@ -89,7 +104,9 @@ async function renderSidebar() {
 
   if (currentTab === 'home') {
     // 只显示.md文件
-    const filesOnly = tree.children.filter(item => item.type === 'file');
+    const filesOnly = tree.children.filter(item => 
+      item.type === 'file' && !item.name.toLowerCase().includes('index')
+    );
     renderItems(filesOnly);
   } else {
     // 显示当前分类下的文章
