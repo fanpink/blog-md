@@ -11,10 +11,13 @@
       pointer-events: none;
     }
     
-    body {
-      margin: 0;
+    html, body {
+      height: 100%;
       font-family: Arial, sans-serif;
-    }
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      }
     .nav-tabs {
       display: flex;
       background: #f0f0f0;
@@ -32,7 +35,7 @@
     }
     .content-area {
       display: flex;
-      height: calc(100vh - 60px);
+      height: calc(100vh - 86px);
     }
     .toc-sidebar {
       width: 200px;
@@ -96,6 +99,9 @@
       <!-- 动态生成目录导航 -->
     </div>
     <div class="main-content" id="mainContent">
+      <h1>欢迎来到我的博客</h1>
+      <p>这里是我的个人博客，记录了我的学习笔记、技术分享和生活感悟。</p>
+      <p>我会不定期发布新的文章，涵盖各种主题，包括编程、技术、生活、思考等。</p>
       <!-- 动态生成文章内容 -->
     </div>
     <div class="toc-sidebar" id="tocSidebar">
