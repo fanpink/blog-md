@@ -1,88 +1,58 @@
-# blog-md
+# My Blog Project
 
-本项目是一个基于 Node.js + Express 的 Markdown 博客内容管理服务。  
-主要功能为：  
-- 提供 `public`、`config`、`contents` 目录的静态文件访问
-- 自动监听 `contents` 目录下的 Markdown 文件变动，生成内容树（`config/tree.json`）
+[中文版本](README.zh-cn.md)
 
-## 功能
-此项目的功能和特点如下：
-1.技术选型：使用nodejs方案，
-2.博客主页：上方横向导航、下方内容区；下方内容区再分为：左边目录显示导航区、右边博客内容显示区
-3.博客文章以markdown格式存储在项目子目录“contents”目录下，contents目录中可以直接存储md文件和分类用的子目录，分类用的子目录中在存储其他markdown博客文章
-4.在项目的config目录下的“tree.json”contents目录中存储的文件树形结构和文件路径，项目实现自动监听contents目录的文件变化，有变化时自动更新tree.json
-5.每次刷新时读取“tree.json”，博客主页上方有多个导航标签采用选项卡模式，包含首页和其他的选项卡标签。其他的选项卡标签通过自动监听contents目录的文件夹变化，按照contents目录下的文件夹名称动态生成同名选项卡标签。
-6.点击首页时，在下方内容区的左边目录显示导航区显示“contents”目录下的所有md格式的文件名自动生成同名导航连接，点击连接在 右边博客内容显示区 显示对应的博客文章内容。点击其他标签选项卡时，左边目录显示导航区显示“contents”目录下对应子目录中的所有md格式的文件名自动生成同名导航连接，点击连接在 右边博客内容显示区 显示对应的博客文章内容。
-7.博客主页的其他标签网页常用的可变内容通过读取项目的config目录下的“setting.json”内容对硬渲染
+This project is a simple blogging system where blog content is stored directly in the `contents` directory. The folder structure is automatically mapped to the navigation bar. Note that the `index.md` file will not appear in the navigation bar but will be displayed as the homepage.
 
-进行改造，满足下面要求：
-改变上面第5点，5.无需刷新，当“contents”目录下对应子目录发生改变时，实现无需刷新自动更新。
-改变上面第6点，6.点击其他标签选项卡时，左边目录显示导航区显示“contents”目录下对应子目录中的所有md格式的文件名自动生成同名导航连接，点击连接在 右边博客内容显示区 显示对应的博客文章内容。
-改变上面第7点，7.博客主页的其他标签网页常用的可变内容通过读取项目的config目录下的“setting.json”内容对硬渲染。
+## Technology Stack
 
+- Backend: Node.js with Express.js
+- Markdown parsing: markdown-it
+- Real-time updates: WebSocket (ws)
+- Diagram support: mermaid
+- File watching: chokidar
+- Build tool: webpack
 
-## 依赖
+## Features
 
-- Node.js 16 及以上
-- npm
+- Automatic navigation generation from directory structure
+- Real-time content updates without page refresh
+- Support for mermaid diagrams in markdown
+- Light/dark theme support
+- Code syntax highlighting
 
-## 安装依赖
+## Development
 
 ```bash
+# Install dependencies
 npm install
+
+# Start development server with hot reload
+npm run dev
+
+# Build frontend assets
+npm run build
+
+# Start production server
+npm start
 ```
 
-## 运行项目
+## Docker Deployment
 
+1. Build the Docker image:
 ```bash
-node server.js
+docker-compose build
 ```
 
-或使用 `npm start`（如已在 `package.json` 配置）
+2. Start the container:
+```bash
+docker-compose up -d
+```
 
-## 访问方式
+3. Access the blog at: http://localhost:5609
 
-- 服务端口：**5609**
-- 访问地址：http://localhost:5609
+## Configuration
 
-### 目录说明
-
-- `public/`：静态资源目录，可直接通过浏览器访问
-- `contents/`：存放 Markdown 文件的目录，支持多级子目录
-- `config/`：存放自动生成的 `tree.json` 文件
-- 'images/'：存放图片的目录，支持多级子目录
-
-
-### 自动生成内容树
-
-每当 `contents/` 目录下的文件或文件夹发生变动时：
-1. 系统会自动生成/更新 `config/tree.json` 文件，描述当前 Markdown 文件的目录结构
-2. 前端页面会自动更新导航标签和目录显示，无需手动刷新页面
-
-### 实时更新功能
-项目使用WebSocket实现实时更新功能，具有以下特点：
-- 当contents目录下的文件结构发生变化时，前端界面会自动更新
-- 新增/删除文件或目录时，导航标签和侧边栏会自动同步更新
-- 当前正在阅读的文章不会受到影响，保持阅读连续性
-
-### Markdown扩展支持
-项目支持以下Markdown扩展语法：
-- **Mermaid图表**：支持流程图、序列图、甘特图等多种图表
-  ```mermaid
-  graph TD
-    A[客户端] -->|WebSocket| B[服务端]
-    B -->|更新通知| A
-  ```
-- **数学公式**：通过KaTeX支持LaTeX数学公式
-- **代码高亮**：通过Prism.js支持多种编程语言的语法高亮
-- **表格**：支持标准的Markdown表格语法
-- **任务列表**：支持GitHub风格的任务列表
-
-### 注意事项
-
-- 首次运行会自动创建 `contents` 和 `config` 目录（如不存在）
-- 仅支持 `.md` 后缀的 Markdown 文件
-- 本项目为后端服务，需配合前端页面或工具进行内容展示
-
----
-如需将项目改造成纯静态网页，请参考服务端代码说明，预生成 `tree.json` 后部署所有静态资源。
+- The server port can be changed in `server.js`
+- Theme settings can be modified in `public/theme/`
+- Markdown extensions can be configured in `server.js`
