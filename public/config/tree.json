@@ -59,6 +59,26 @@
           "path": "技术\\latex测试.md"
         },
         {
+          "name": "php脚本实现生成tree.json.md",
+          "type": "file",
+          "path": "技术\\php脚本实现生成tree.json.md"
+        },
+        {
+          "name": "powershell脚本生成tree.json.md",
+          "type": "file",
+          "path": "技术\\powershell脚本生成tree.json.md"
+        },
+        {
+          "name": "python脚本生成tree.json.md",
+          "type": "file",
+          "path": "技术\\python脚本生成tree.json.md"
+        },
+        {
+          "name": "shell脚本生成tree.json.md",
+          "type": "file",
+          "path": "技术\\shell脚本生成tree.json.md"
+        },
+        {
           "name": "技术.md",
           "type": "file",
           "path": "技术\\技术.md"
