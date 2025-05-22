@@ -1,0 +1,101 @@
+.mermaid {
+  pointer-events: none;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden; */
+  background-color: #0d1117; /* GitHub dark background */
+  color: #c9d1d9; /* GitHub dark text */
+  }
+.nav-tabs {
+  display: flex;
+  background: #161b22; /* GitHub dark header background */
+  padding: 5px;
+  border-bottom: 1px solid #30363d; /* GitHub border color */
+  justify-content: space-between;
+}
+.nav-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #c9d1d9;
+}
+.nav-tab.active, .theme-toggle {
+  background-color: #0d1117; /* Match body background or slightly different */
+  font-weight: bold;
+  border-bottom: 2px solid #58a6ff; /* GitHub blue accent */
+  color: #58a6ff;
+}
+
+.theme-toggle {
+  cursor: pointer;
+}
+
+.org-tab {
+  margin-left: auto;
+}
+.content-area {
+  display: flex;
+  height: calc(100vh - 87px); /* Adjusted for border */
+}
+.toc-sidebar {
+  width: 200px;
+  border-left: 1px solid #30363d; /* GitHub border color */
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #161b22; /* GitHub dark panel background */
+}
+.toc-item {
+  padding: 5px 10px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #c9d1d9;
+}
+.toc-item:hover {
+  background-color: #21262d; /* GitHub hover color */
+}
+.toc-item.active {
+  background-color: #58a6ff; /* GitHub blue accent */
+  color: #ffffff; /* White text on active */
+}
+.sidebar {
+  width: 250px;
+  border-right: 1px solid #30363d; /* GitHub border color */
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #161b22; /* GitHub dark panel background */
+}
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #0d1117; /* GitHub dark main content background */
+  height: calc(100vh - 87px); /* 添加固定高度 */
+  position: relative; /* 添加相对定位 */
+}
+.category-title {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  color: #58a6ff; /* GitHub blue accent for titles */
+  font-size: 1.1em;
+}
+.article-link {
+  padding: 8px 15px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #c9d1d9;
+}
+.article-link:hover {
+  background-color: #21262d; /* GitHub hover color */
+}
+.article-link.active {
+  background-color: #58a6ff; /* GitHub blue accent */
+  color: #ffffff; /* White text on active */
+}

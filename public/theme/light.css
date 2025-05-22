@@ -1,0 +1,101 @@
+.mermaid {
+  pointer-events: none;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden; */
+  background-color: #ffffff; /* 白色背景 */
+  color: #24292e; /* 深灰色文字 */
+  }
+.nav-tabs {
+  display: flex;
+  background: #f6f8fa; /* 浅灰色标题背景 */
+  padding: 5px;
+  border-bottom: 1px solid #e1e4e8; /* 浅灰色边框 */
+  justify-content: space-between;
+}
+.nav-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #24292e; /* 深灰色文字 */
+}
+.nav-tab.active, .theme-toggle {
+  background-color: #ffffff; /* 白色背景 */
+  font-weight: bold;
+  border-bottom: 2px solid #58a6ff; /* 保持蓝色强调色 */
+  color: #58a6ff;
+}
+
+.theme-toggle {
+  cursor: pointer;
+}
+
+.org-tab {
+  margin-left: auto;
+}
+.content-area {
+  display: flex;
+  height: calc(100vh - 87px); /* 保持相同高度 */
+}
+.toc-sidebar {
+  width: 200px;
+  border-left: 1px solid #e1e4e8; /* 浅灰色边框 */
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f6f8fa; /* 浅灰色背景 */
+}
+.toc-item {
+  padding: 5px 10px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #24292e; /* 深灰色文字 */
+}
+.toc-item:hover {
+  background-color: #e1e4e8; /* 浅灰色悬停效果 */
+}
+.toc-item.active {
+  background-color: #58a6ff; /* 保持蓝色强调色 */
+  color: #ffffff; /* 白色文字 */
+}
+.sidebar {
+  width: 250px;
+  border-right: 1px solid #e1e4e8; /* 浅灰色边框 */
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f6f8fa; /* 浅灰色背景 */
+}
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #ffffff; /* 白色背景 */
+  height: calc(100vh - 87px); /* 保持相同高度 */
+  position: relative;
+}
+.category-title {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  color: #58a6ff; /* 保持蓝色标题 */
+  font-size: 1.1em;
+}
+.article-link {
+  padding: 8px 15px;
+  margin: 2px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #24292e; /* 深灰色文字 */
+}
+.article-link:hover {
+  background-color: #e1e4e8; /* 浅灰色悬停效果 */
+}
+.article-link.active {
+  background-color: #58a6ff; /* 保持蓝色强调色 */
+  color: #ffffff; /* 白色文字 */
+}
