@@ -4,8 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
 
+// 读取配置
+const setting = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'setting.json'), 'utf-8'));
+const PORT = setting.port || 5609; // 优先使用配置文件端口
+
 const app = express();
-const PORT = 5609; // 群晖Web Station推荐端口范围8000-9000
 
 // 设置静态文件目录
 app.use(express.static('public'));

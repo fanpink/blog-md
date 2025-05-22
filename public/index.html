@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的博客</title>
+  <title id="siteTitle">我的博客</title>
   <!-- 添加 favicon 小图标 -->
   <link rel="icon" href="./static/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="./theme/dark.css">
@@ -11,6 +11,12 @@
 </head>
 <body>
   <div class="nav-tabs" id="navTabs">
+    <!-- logo  图片"static/avatar.png"-->
+     <div class="logo">
+       <img src="./static/avatar.png" alt="avatar" width="32" height="32">
+
+     </div>
+    <!-- 动态生成导航 -->
     <div class="nav-tab active" data-tab="home">首页</div>
     <div class="nav-tab" data-tab="org" style="margin-left: auto;">org(组织名称)</div>
     <div class="nav-tab theme-toggle" id="themeToggle" style="margin-left: auto;">🌓</div>
@@ -29,6 +35,12 @@
       <!-- 动态生成目录导航 -->
     </div>
   </div>
+          <!-- 页脚 -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        power by <a href="https://github.com/fanpink/blog-md" target="_blank" rel="noopener noreferrer">fanpink</a>
+      </div>
+    </footer>
   <!-- KaTeX CSS -->
   <link rel="stylesheet" href="js-lib/katex/dist/katex.min.css">
 
@@ -58,6 +70,18 @@
     }
     document.addEventListener('DOMContentLoaded', initMermaid);
   </script>
+
+  <script>
+    // 动态设置页面标题
+    fetch('/config/setting.json')
+      .then(res => res.json())
+      .then(cfg => {
+        document.title = cfg.title || '我的博客';
+        const siteTitle = document.getElementById('siteTitle');
+        if (siteTitle) siteTitle.textContent = cfg.title || '我的博客';
+      });
+  </script>
+
   <script src="/app.js"></script>
 </body>
 </html>

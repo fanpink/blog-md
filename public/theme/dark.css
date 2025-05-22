@@ -3,6 +3,7 @@
 }
 
 html, body {
+  font-size: 1.0em;
   height: 100%;
   font-family: Arial, sans-serif;
   margin: 0;
@@ -12,14 +13,15 @@ html, body {
   color: #c9d1d9; /* GitHub dark text */
   }
 .nav-tabs {
+  font-size: 1.2em;
   display: flex;
   background: #161b22; /* GitHub dark header background */
-  padding: 5px;
+  padding: 1px;
   border-bottom: 1px solid #30363d; /* GitHub border color */
   justify-content: space-between;
 }
 .nav-tab {
-  padding: 10px 20px;
+  padding: 5px 20px;
   cursor: pointer;
   transition: all 0.3s;
   color: #c9d1d9;
@@ -42,13 +44,22 @@ html, body {
 }
 .content-area {
   display: flex;
-  height: calc(100vh - 47px); /* 47px是导航栏的实际高度 */
+  height: calc(100vh - 4px - 58px); /* 47px是导航栏的实际高度 */
   flex: 1;
   min-height: 0; /* 允许内容区域收缩 */
 }
+.main-content {
+  flex: 1;
+  padding: 16px ;
+  overflow-y: auto;
+  background-color: #0d1117; /* GitHub dark main content background */
+  height: calc(100vh - 4px - 90px); /* 添加固定高度 */
+  position: relative; /* 添加相对定位 */
+}
 .toc-sidebar {
-  width: 200px;
+  width: 300px;
   border-left: 1px solid #30363d; /* GitHub border color */
+  height: calc(100vh - 4px - 98px); /* 添加固定高度 */
   padding: 20px;
   overflow-y: auto;
   background-color: #161b22; /* GitHub dark panel background */
@@ -69,19 +80,12 @@ html, body {
   color: #ffffff; /* White text on active */
 }
 .sidebar {
-  width: 250px;
+  width: 300px;
+  height: calc(100vh - 4px - 78px); /* 添加固定高度 */
   border-right: 1px solid #30363d; /* GitHub border color */
-  padding: 20px;
+  padding: 10px;
   overflow-y: auto;
   background-color: #161b22; /* GitHub dark panel background */
-}
-.main-content {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  background-color: #0d1117; /* GitHub dark main content background */
-  height: calc(100vh - 87px); /* 添加固定高度 */
-  position: relative; /* 添加相对定位 */
 }
 .category-title {
   font-weight: bold;
@@ -102,4 +106,18 @@ html, body {
 .article-link.active {
   background-color: #58a6ff; /* GitHub blue accent */
   color: #ffffff; /* White text on active */
+}
+.footer-content {
+  text-align: center;
+  width: 100%;
+  font-size: 0.8em;
+  line-height: 20px;
+}
+
+a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }

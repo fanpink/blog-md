@@ -3,32 +3,31 @@
 }
 
 html, body {
+  font-size: 1.0em;
   height: 100%;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  /* overflow: hidden; */
-  background-color: #ffffff; /* 白色背景 */
-  color: #24292e; /* 深灰色文字 */
-  }
+  background-color: #ffffff; /* 亮色背景 */
+  color: #24292e; /* 深色文字 */
+}
 .nav-tabs {
+  font-size: 1.2em;
   display: flex;
-  background: #f6f8fa; /* 浅灰色标题背景 */
-  padding: 5px;
-  border-bottom: 1px solid #e1e4e8; /* 浅灰色边框 */
+  background: #f6f8fa; /* 亮色标题背景 */
+  padding: 1px;
+  border-bottom: 1px solid #e1e4e8; /* 亮色边框 */
   justify-content: space-between;
 }
 .nav-tab {
-  padding: 10px 20px;
+  padding: 5px 20px;
   cursor: pointer;
   transition: all 0.3s;
-  color: #24292e; /* 深灰色文字 */
+  color: #24292e;
 }
 .nav-tab.active, .theme-toggle {
-  background-color: #ffffff; /* 白色背景 */
-  /* font-weight: bold; */
-  /* border-bottom: 2px solid #58a6ff; 保持蓝色强调色 */
-  color: #070707; /* 深灰色文字 */
+  font-weight: bold;
+  color: #58a6ff;
 }
 
 .theme-toggle {
@@ -37,19 +36,29 @@ html, body {
 
 .org-tab {
   margin-left: auto;
+  color: #4ca0ff;
 }
 .content-area {
   display: flex;
-  height: calc(100vh - 49px); /* 47px是导航栏的实际高度 */
+  height: calc(100vh - 4px - 58px);
   flex: 1;
-  min-height: 0; /* 允许内容区域收缩 */
+  min-height: 0;
+}
+.main-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  height: calc(100vh - 4px - 90px);
+  position: relative;
 }
 .toc-sidebar {
-  width: 200px;
-  border-left: 1px solid #e1e4e8; /* 浅灰色边框 */
+  width: 300px;
+  border-left: 1px solid #e1e4e8;
+  height: calc(100vh - 4px - 98px);
   padding: 20px;
   overflow-y: auto;
-  background-color: #f6f8fa; /* 浅灰色背景 */
+  background-color: #f6f8fa;
 }
 .toc-item {
   padding: 5px 10px;
@@ -57,34 +66,27 @@ html, body {
   cursor: pointer;
   border-radius: 4px;
   font-size: 0.9em;
-  color: #24292e; /* 深灰色文字 */
+  color: #24292e;
 }
 .toc-item:hover {
-  background-color: #e1e4e8; /* 浅灰色悬停效果 */
+  background-color: #e1e4e8;
 }
 .toc-item.active {
-  background-color: #58a6ff; /* 保持蓝色强调色 */
-  color: #ffffff; /* 白色文字 */
+  background-color: #58a6ff;
+  color: #ffffff;
 }
 .sidebar {
-  width: 250px;
-  border-right: 1px solid #e1e4e8; /* 浅灰色边框 */
-  padding: 20px;
+ width: 300px;
+  height: calc(100vh - 4px - 78px);
+  border-right: 1px solid #e1e4e8;
+  padding: 10px;
   overflow-y: auto;
-  background-color: #f6f8fa; /* 浅灰色背景 */
-}
-.main-content {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  background-color: #ffffff; /* 白色背景 */
-  height: calc(100vh - 87px); /* 保持相同高度 */
-  position: relative;
+  background-color: #f6f8fa;
 }
 .category-title {
   font-weight: bold;
   margin: 15px 0 5px 0;
-  color: #58a6ff; /* 保持蓝色标题 */
+  color: #58a6ff;
   font-size: 1.1em;
 }
 .article-link {
@@ -92,12 +94,26 @@ html, body {
   margin: 2px 0;
   cursor: pointer;
   border-radius: 4px;
-  color: #24292e; /* 深灰色文字 */
+  color: #24292e;
 }
 .article-link:hover {
-  background-color: #e1e4e8; /* 浅灰色悬停效果 */
+  background-color: #e1e4e8;
 }
 .article-link.active {
-  background-color: #58a6ff; /* 保持蓝色强调色 */
-  color: #ffffff; /* 白色文字 */
+  background-color: #58a6ff;
+  color: #ffffff;
+}
+.footer-content {
+  text-align: center;
+  width: 100%;
+  font-size: 0.8em;
+  line-height: 20px;
+}
+
+a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }

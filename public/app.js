@@ -6,6 +6,19 @@ const mainContent = document.getElementById('mainContent');
 // 当前选中的标签
 let currentTab = 'home';
 
+// 全局设置对象
+let globalSetting = { title: '我的博客', orgin: 'fanpink', port: 5609 };
+
+// 异步加载配置
+async function fetchSetting() {
+  try {
+    const res = await fetch('/config/setting.json');
+    globalSetting = await res.json();
+  } catch (e) {
+    // 保持默认
+  }
+}
+
 // 从服务器获取文件树结构
 async function fetchFileTree() {
   const response = await fetch('/config/tree.json');
@@ -20,6 +33,7 @@ async function fetchArticle(path) {
 
 // 渲染导航标签
 async function renderNavTabs() {
+  await fetchSetting(); // 确保设置已加载
   const tree = await fetchFileTree();
   
   // 清空现有标签
@@ -59,7 +73,7 @@ async function renderNavTabs() {
   // 添加机构标签
   const orgTab = document.createElement('div');
   orgTab.className = 'nav-tab';
-  orgTab.textContent = 'org(组织名称)';
+  orgTab.textContent = globalSetting.orgin || 'org(组织名称)';
   orgTab.style.marginLeft = 'auto';
   orgTab.dataset.tab = 'home';
   orgTab.addEventListener('click', () => {
