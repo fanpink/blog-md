@@ -24,7 +24,7 @@
         {
           "name": "图文测试.md",
           "type": "file",
-          "path": "图文\\图文测试.md"
+          "path": "图文/图文测试.md"
         }
       ]
     },
@@ -35,12 +35,12 @@
         {
           "name": "学习.md",
           "type": "file",
-          "path": "学习\\学习.md"
+          "path": "学习/学习.md"
         },
         {
           "name": "测试.md",
           "type": "file",
-          "path": "学习\\测试.md"
+          "path": "学习/测试.md"
         }
       ]
     },
@@ -51,17 +51,17 @@
         {
           "name": "gitea配置记录.md",
           "type": "file",
-          "path": "技术\\gitea配置记录.md"
+          "path": "技术/gitea配置记录.md"
         },
         {
           "name": "latex测试.md",
           "type": "file",
-          "path": "技术\\latex测试.md"
+          "path": "技术/latex测试.md"
         },
         {
           "name": "技术.md",
           "type": "file",
-          "path": "技术\\技术.md"
+          "path": "技术/技术.md"
         }
       ]
     },
@@ -72,7 +72,7 @@
         {
           "name": "思维导图.md",
           "type": "file",
-          "path": "测试\\思维导图.md"
+          "path": "测试/思维导图.md"
         }
       ]
     }

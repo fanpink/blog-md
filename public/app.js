@@ -183,22 +183,35 @@ async function renderArticle(path) {
     item.style.paddingLeft = `${(level - 2) * 15}px`;
     item.textContent = heading.textContent;
     
-    // 点击目录项滚动到对应标题
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.toc-item').forEach(el => el.classList.remove('active'));
-      item.classList.add('active');
-      heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+   // 点击目录项滚动到对应标题
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.toc-item').forEach(el => el.classList.remove('active'));
+    item.classList.add('active');
     
-    // 监听滚动事件高亮当前目录项
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+    // 获取mainContent元素
+    const mainContent = document.getElementById('mainContent');
+    // 计算标题相对于mainContent的顶部位置
+    const headingTop = heading.getBoundingClientRect().top - mainContent.getBoundingClientRect().top + mainContent.scrollTop;
+    
+    // 平滑滚动到该位置
+    mainContent.scrollTo({
+        top: headingTop,
+        behavior: 'smooth'
+    });
+  });
+    
+   // 监听滚动事件高亮当前目录项
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
         if (entry.isIntersecting) {
-          document.querySelectorAll('.toc-item').forEach(el => el.classList.remove('active'));
-          item.classList.add('active');
+            document.querySelectorAll('.toc-item').forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
         }
-      });
-    }, { threshold: 0.5 });
+    });
+  }, { 
+    threshold: 0.5,
+    root: document.getElementById('mainContent') // 设置观察器的根元素为mainContent
+  });
     
     observer.observe(heading);
     tocSidebar.appendChild(item);
