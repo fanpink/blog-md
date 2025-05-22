@@ -37,6 +37,8 @@ html, body {
 
 .org-tab {
   margin-left: auto;
+  color: #4ca0ff;
+
 }
 .content-area {
   display: flex;
