@@ -1,4 +1,4 @@
-# My Blog Project
+# Blog-md
 
 [中文版本](README.zh-cn.md)
 
