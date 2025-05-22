@@ -59,7 +59,7 @@ async function renderNavTabs() {
   // 添加机构标签
   const orgTab = document.createElement('div');
   orgTab.className = 'nav-tab';
-  orgTab.textContent = '绥江县防震减灾局';
+  orgTab.textContent = 'org(组织名称)';
   orgTab.style.marginLeft = 'auto';
   orgTab.dataset.tab = 'home';
   orgTab.addEventListener('click', () => {
