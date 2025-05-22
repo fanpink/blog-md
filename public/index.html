@@ -12,10 +12,10 @@
 <body>
   <div class="nav-tabs" id="navTabs">
     <!-- logo  图片"static/avatar.png"-->
-     <div class="logo">
+     <!-- <div class="logo">
        <img src="./static/avatar.png" alt="avatar" width="32" height="32">
 
-     </div>
+     </div> -->
     <!-- 动态生成导航 -->
     <div class="nav-tab active" data-tab="home">首页</div>
     <div class="nav-tab" data-tab="org" style="margin-left: auto;">org(组织名称)</div>
@@ -73,7 +73,7 @@
 
   <script>
     // 动态设置页面标题
-    fetch('/config/setting.json')
+    fetch('config/setting.json')
       .then(res => res.json())
       .then(cfg => {
         document.title = cfg.title || '我的博客';
@@ -82,6 +82,6 @@
       });
   </script>
 
-  <script src="/app.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>

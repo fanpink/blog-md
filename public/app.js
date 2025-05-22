@@ -12,7 +12,7 @@ let globalSetting = { title: '我的博客', orgin: 'fanpink', port: 5609 };
 // 异步加载配置
 async function fetchSetting() {
   try {
-    const res = await fetch('/config/setting.json');
+    const res = await fetch('config/setting.json');
     globalSetting = await res.json();
   } catch (e) {
     // 保持默认
@@ -21,13 +21,13 @@ async function fetchSetting() {
 
 // 从服务器获取文件树结构
 async function fetchFileTree() {
-  const response = await fetch('/config/tree.json');
+  const response = await fetch('config/tree.json');
   return await response.json();
 }
 
 // 从服务器获取文章内容
 async function fetchArticle(path) {
-  const response = await fetch(`/contents/${path}`);
+  const response = await fetch(`contents/${path}`);
   return await response.text();
 }
 
@@ -279,20 +279,20 @@ async function renderArticle(path) {
   });
 }
 
-// 初始化WebSocket连接
-const socket = new WebSocket(`ws://${window.location.host}`);
+// // 初始化WebSocket连接
+// const socket = new WebSocket(`ws://${window.location.host}`);
 
-// 监听WebSocket消息
-socket.addEventListener('message', (event) => {
-  const data = JSON.parse(event.data);
-  if (data.type === 'filetree-update') {
-    // 文件树有更新，重新渲染界面
-    renderNavTabs();
-    if (currentTab === 'home') {
-      renderSidebar();
-    }
-  }
-});
+// // 监听WebSocket消息
+// socket.addEventListener('message', (event) => {
+//   const data = JSON.parse(event.data);
+//   if (data.type === 'filetree-update') {
+//     // 文件树有更新，重新渲染界面
+//     renderNavTabs();
+//     if (currentTab === 'home') {
+//       renderSidebar();
+//     }
+//   }
+// });
 
 // 初始化
 renderNavTabs();

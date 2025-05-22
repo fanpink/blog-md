@@ -5,21 +5,21 @@ const path = require('path');
 const WebSocket = require('ws');
 
 // 读取配置
-const setting = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'setting.json'), 'utf-8'));
+const setting = JSON.parse(fs.readFileSync(path.join(__dirname, 'public/config', 'setting.json'), 'utf-8'));
 const PORT = setting.port || 5609; // 优先使用配置文件端口
 
 const app = express();
 
 // 设置静态文件目录
 app.use(express.static('public'));
-app.use('/config', express.static('config'));
-app.use('/contents', express.static('contents'));
-app.use('/images', express.static('images'));
+// app.use('public/config', express.static('config'));
+// app.use('public/contents', express.static('contents'));
+// app.use('public/images', express.static('images'));
 
 
 // 监听contents目录变化
-const contentsPath = path.join(__dirname, 'contents');
-const configPath = path.join(__dirname, 'config');
+const contentsPath = path.join(__dirname, 'public/contents');
+const configPath = path.join(__dirname, 'public/config');
 
 // 确保目录存在
 if (!fs.existsSync(contentsPath)) {
