@@ -26,9 +26,9 @@ html, body {
 }
 .nav-tab.active, .theme-toggle {
   background-color: #ffffff; /* 白色背景 */
-  font-weight: bold;
-  border-bottom: 2px solid #58a6ff; /* 保持蓝色强调色 */
-  color: #58a6ff;
+  /* font-weight: bold; */
+  /* border-bottom: 2px solid #58a6ff; 保持蓝色强调色 */
+  color: #070707; /* 深灰色文字 */
 }
 
 .theme-toggle {
@@ -40,7 +40,9 @@ html, body {
 }
 .content-area {
   display: flex;
-  height: calc(100vh - 87px); /* 保持相同高度 */
+  height: calc(100vh - 49px); /* 47px是导航栏的实际高度 */
+  flex: 1;
+  min-height: 0; /* 允许内容区域收缩 */
 }
 .toc-sidebar {
   width: 200px;

@@ -70,6 +70,40 @@ async function renderNavTabs() {
     renderArticle('index.md');
   });
   navTabs.appendChild(orgTab);
+
+  // 添加主题切换按钮
+  const themeToggle = document.createElement('div');
+  themeToggle.className = 'nav-tab theme-toggle';
+  themeToggle.id = 'themeToggle';
+  themeToggle.textContent = '🌓';
+  themeToggle.addEventListener('click', (e) => {
+    e.stopPropagation(); // 阻止事件冒泡
+    toggleTheme();
+  });
+  navTabs.appendChild(themeToggle);
+}
+
+// 主题切换功能
+function toggleTheme() {
+  const darkLink = document.querySelector('link[href="./theme/dark.css"]');
+  const lightLink = document.querySelector('link[href="./theme/light.css"]');
+  
+  // 确保两个样式表都存在
+  if (!darkLink || !lightLink) {
+    console.error('找不到主题样式表');
+    return;
+  }
+
+  // 切换主题
+  const isDark = !darkLink.disabled;
+  darkLink.disabled = isDark;
+  lightLink.disabled = !isDark;
+  
+  // 更新按钮文本
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.textContent = isDark ? '🌞' : '🌙';
+  }
 }
 
 // 渲染侧边栏导航

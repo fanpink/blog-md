@@ -25,9 +25,9 @@ html, body {
   color: #c9d1d9;
 }
 .nav-tab.active, .theme-toggle {
-  background-color: #0d1117; /* Match body background or slightly different */
+  /* background-color: #0d1117; Match body background or slightly different */
   font-weight: bold;
-  border-bottom: 2px solid #58a6ff; /* GitHub blue accent */
+  /* border-bottom: 2px solid #58a6ff; GitHub blue accent */
   color: #58a6ff;
 }
 
@@ -40,7 +40,9 @@ html, body {
 }
 .content-area {
   display: flex;
-  height: calc(100vh - 87px); /* Adjusted for border */
+  height: calc(100vh - 47px); /* 47px是导航栏的实际高度 */
+  flex: 1;
+  min-height: 0; /* 允许内容区域收缩 */
 }
 .toc-sidebar {
   width: 200px;

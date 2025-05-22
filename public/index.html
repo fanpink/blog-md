@@ -7,13 +7,14 @@
   <!-- 添加 favicon 小图标 -->
   <link rel="icon" href="./static/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="./theme/dark.css">
-  <!-- <link rel="stylesheet" href="./theme/light.css"> -->
+  <link rel="stylesheet" href="./theme/light.css" disabled>
 </head>
 <body>
   <div class="nav-tabs" id="navTabs">
     <div class="nav-tab active" data-tab="home">首页</div>
-    <div class="nav-tab theme-toggle" id="themeToggle" style="margin-left: auto;">🌓 切换主题</div>
     <div class="nav-tab" data-tab="org" style="margin-left: auto;">绥江县防震减灾局</div>
+    <div class="nav-tab theme-toggle" id="themeToggle" style="margin-left: auto;">🌓</div>
+    
   </div>
   
   <div class="content-area">
@@ -56,23 +57,6 @@
       }
     }
     document.addEventListener('DOMContentLoaded', initMermaid);
-  </script>
-  <script>
-    // 主题切换功能
-    document.getElementById('themeToggle').addEventListener('click', function() {
-      const darkLink = document.querySelector('link[href="./theme/dark.css"]');
-      const lightLink = document.querySelector('link[href="./theme/light.css"]');
-      
-      if (darkLink && !darkLink.disabled) {
-        // 当前是暗色主题，切换到亮色
-        darkLink.disabled = true;
-        lightLink.disabled = false;
-      } else {
-        // 当前是亮色主题，切换到暗色
-        darkLink.disabled = false;
-        lightLink.disabled = true;
-      }
-    });
   </script>
   <script src="/app.js"></script>
 </body>
