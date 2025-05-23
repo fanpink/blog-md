@@ -36,23 +36,10 @@ async function renderNavTabs() {
   await fetchSetting(); // 确保设置已加载
   const tree = await fetchFileTree();
   
-  // 清空现有标签
-  navTabs.innerHTML = '';
-  
-  // 添加首页标签
-  const homeTab = document.createElement('div');
-  homeTab.className = `nav-tab ${currentTab === 'home' ? 'active' : ''}`;
-  homeTab.textContent = '首页';
-  homeTab.dataset.tab = 'home';
-  homeTab.addEventListener('click', () => {
-    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-    homeTab.classList.add('active');
-    currentTab = 'home';
-    renderSidebar();
-    renderArticle('index.md');
-  });
-  navTabs.appendChild(homeTab);
-  
+  // 清空分类标签容器
+  const categoryTabs = document.getElementById('categoryTabs');
+  categoryTabs.innerHTML = '';
+
   // 添加分类标签
   tree.children.forEach(child => {
     if (child.type === 'directory') {
@@ -66,27 +53,11 @@ async function renderNavTabs() {
         currentTab = child.name;
         renderSidebar();
       });
-      navTabs.appendChild(tab);
+      categoryTabs.appendChild(tab);
     }
   });
 
-  // 添加机构标签
-  const orgTab = document.createElement('div');
-  orgTab.className = 'nav-tab';
-  orgTab.textContent = globalSetting.orgin || 'org(组织名称)';
-  orgTab.style.marginLeft = 'auto';
-  orgTab.dataset.tab = 'home';
-  orgTab.addEventListener('click', () => {
-    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-    document.querySelector('.nav-tab[data-tab="home"]').classList.add('active');
-    currentTab = 'home';
-    renderSidebar();
-    renderArticle('index.md');
-  });
-  navTabs.appendChild(orgTab);
-
-  // 添加主题切换按钮
-  const themeToggle = document.createElement('div');
+  // 初始化主题切换按钮事件
   themeToggle.className = 'nav-tab theme-toggle';
   themeToggle.id = 'themeToggle';
   themeToggle.textContent = '🌓';
@@ -294,7 +265,45 @@ async function renderArticle(path) {
 //   }
 // });
 
+// 初始化事件绑定
+function initEventListeners() {
+  // 首页标签点击
+  document.querySelector('.nav-tab[data-tab="home"]').addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    document.querySelector('.nav-tab[data-tab="home"]').classList.add('active');
+    currentTab = 'home';
+    renderSidebar();
+    renderArticle('index.md');
+  });
+
+  // 机构标签点击
+  document.querySelector('.org-tab').addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    document.querySelector('.nav-tab[data-tab="home"]').classList.add('active');
+    currentTab = 'home';
+    renderSidebar();
+    renderArticle('index.md');
+  });
+
+  // 主题切换按钮
+  document.getElementById('themeToggle').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleTheme();
+  });
+}
+
 // 初始化
 renderNavTabs();
+initEventListeners();
+// 确保在配置加载和DOM就绪后设置机构名称
+fetchSetting().then(() => {
+  const orgTab = document.querySelector('.org-tab');
+  if (orgTab) {
+    orgTab.textContent = globalSetting.orgin || '默认机构';
+  }
+});
 renderSidebar();
 renderArticle('index.md');
+
+// 设置组织名称
+document.querySelector('.org-tab').textContent = globalSetting.orgin;
