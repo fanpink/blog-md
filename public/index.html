@@ -12,15 +12,22 @@
 <body>
   <div class="nav-tabs" id="navTabs">
     <!-- logo  图片"static/avatar.png"-->
-     <!-- <div class="logo">
+     <div class="logo">
+       <img src="./static/avatar.png" alt="avatar" width="34" height="34">
+     </div>
+    <!-- 静态导航标签 -->
+    <div class="nav-tab active" data-tab="home" style="display: flex;">
+      <!-- <div class="logo">
        <img src="./static/avatar.png" alt="avatar" width="32" height="32">
-
      </div> -->
-    <!-- 动态生成导航 -->
-    <div class="nav-tab active" data-tab="home">首页</div>
-    <div class="nav-tab" data-tab="org" style="margin-left: auto;">org(组织名称)</div>
-    <div class="nav-tab theme-toggle" id="themeToggle" style="margin-left: auto;">🌓</div>
+     首页</div>
     
+    <!-- 动态分类标签插入位置 -->
+    <div id="categoryTabs" style="display: flex;"></div>
+    
+    <!-- 右侧固定元素 -->
+    <div class="nav-tab org-tab" data-tab="org" style="margin-left: auto;">org(组织名称)</div>
+    <div class="nav-tab theme-toggle" id="themeToggle">🌓</div>
   </div>
   
   <div class="content-area">

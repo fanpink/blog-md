@@ -26,6 +26,12 @@ html, body {
   transition: all 0.3s;
   color: #c9d1d9;
 }
+.nav-tab:hover {
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #067df4;
+}
 .nav-tab.active, .theme-toggle {
   /* background-color: #0d1117; Match body background or slightly different */
   font-weight: bold;
@@ -115,9 +121,10 @@ html, body {
 }
 
 a {
-  color: #58a6ff;
+  color: #0779fc;
   text-decoration: none;
 }
 a:hover {
+  color: #4834f6;
   text-decoration: underline;
 }
