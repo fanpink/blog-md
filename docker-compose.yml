@@ -14,15 +14,9 @@ services:
 
     volumes:
       # 即使代码已经构建到镜像中，我们仍然需要映射这些目录：
-      # 1. contents: 你的 markdown 文件会在这里变动，chokidar 需要监听到。
-      # 2. config: server.js 会写入 tree.json 到这个目录。
-      # 3. public: 如果你有希望从外部直接更新的静态资源。
-      # 确保这些路径相对于 docker-compose.yml 文件是正确的。
-      - ./contents:/usr/src/app/contents
-      - ./config:/usr/src/app/config
-      - ./public:/usr/src/app/public
-      - ./images:/usr/src/app/images
 
+      # 确保这些路径相对于 docker-compose.yml 文件是正确的。
+      - ./public:/usr/src/app/public
     # Dockerfile 中已经设置了 CHOKIDAR_USEPOLLING=true，这里可以不重复设置
     # environment:
     #   - CHOKIDAR_USEPOLLING=true
