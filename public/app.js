@@ -51,7 +51,14 @@ async function renderNavTabs() {
         document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
         tab.classList.add('active');
         currentTab = child.name;
+        isSearchMode = false; // 退出搜索模式
         renderSidebar();
+        // 获取分类下的第一个文件作为默认显示
+        const category = tree.children.find(c => c.name === currentTab);
+        if (category?.children?.length) {
+          const firstFile = category.children.find(item => item.type === 'file');
+          firstFile && renderArticle(firstFile.path);
+        }
       });
       categoryTabs.appendChild(tab);
     }
@@ -265,15 +272,130 @@ async function renderArticle(path) {
 //   }
 // });
 
-// 初始化事件绑定
+
+// 搜索功能实现
+let isSearchMode = false;
+let currentSearchKeyword = '';
+
+// 深度优先搜索文件树
+function searchInTree(items, keyword, results = []) {
+  items.forEach(item => {
+    if (item.type === 'file' && item.name.toLowerCase().includes(keyword.toLowerCase())) {
+      results.push({
+        name: item.name.replace('.md', ''),
+        path: item.path
+      });
+    }
+    if (item.children) {
+      searchInTree(item.children, keyword, results);
+    }
+  });
+  return results;
+}
+
+// 处理搜索请求
+async function handleSearch() {
+  const keyword = document.getElementById('searchInput').value.trim();
+  if (!keyword) {
+    isSearchMode = false;
+    renderSidebar();
+    return;
+  }
+
+  isSearchMode = true;
+  currentSearchKeyword = keyword;
+  
+  // 显示加载状态
+  sidebar.innerHTML = '<div class="search-loading">搜索中...</div>';
+  
+  try {
+    const tree = await fetchFileTree();
+    const results = searchInTree(tree.children, keyword);
+    
+    if (results.length === 0) {
+      sidebar.innerHTML = `<div class="search-empty">未找到与"${keyword}"相关的结果</div>`;
+      return;
+    }
+    
+    renderSidebar(results);
+  } catch (error) {
+    console.error('搜索失败:', error);
+    sidebar.innerHTML = '<div class="search-error">搜索失败，请稍后重试</div>';
+  }
+}
+
+// 扩展侧边栏渲染功能
+async function renderSidebar(results) {
+  const tree = await fetchFileTree();
+  sidebar.innerHTML = '';
+
+  if (isSearchMode) {
+    // 渲染搜索结果
+    results.forEach(result => {
+      const link = document.createElement('div');
+      link.className = 'article-link search-result';
+      link.innerHTML = result.name.replace(new RegExp(currentSearchKeyword, 'gi'), match =>
+        `<span class="highlight">${match}</span>`
+      );
+      link.addEventListener('click', () => {
+        document.querySelectorAll('.article-link').forEach(el => el.classList.remove('active'));
+        link.classList.add('active');
+        renderArticle(result.path);
+      });
+      sidebar.appendChild(link);
+    });
+  } else {
+    // 原始渲染逻辑
+    const renderItems = (items, parentPath = '') => {
+      items.forEach(item => {
+        if (item.type === 'file') {
+          const link = document.createElement('div');
+          link.className = 'article-link';
+          link.textContent = item.name.replace('.md', '');
+          link.addEventListener('click', () => {
+            document.querySelectorAll('.article-link').forEach(el => el.classList.remove('active'));
+            link.classList.add('active');
+            renderArticle(parentPath + item.path);
+          });
+          sidebar.appendChild(link);
+        } else if (item.type === 'directory') {
+          const categoryTitle = document.createElement('div');
+          categoryTitle.className = 'category-title';
+          categoryTitle.textContent = item.name;
+          sidebar.appendChild(categoryTitle);
+          renderItems(item.children, parentPath + item.name + '/');
+        }
+      });
+    };
+    
+    if (currentTab === 'home') {
+      const filesOnly = tree.children.filter(item =>
+        item.type === 'file' && !item.name.toLowerCase().includes('index')
+      );
+      renderItems(filesOnly);
+    } else {
+      const category = tree.children.find(c => c.name === currentTab);
+      if (category) {
+        renderItems(category.children);
+      }
+    }
+  }
+}
+
+// 初始化事件监听（合并版本）
 function initEventListeners() {
-  // 首页标签点击
+  // 原有导航标签事件监听
   document.querySelector('.nav-tab[data-tab="home"]').addEventListener('click', () => {
     document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
     document.querySelector('.nav-tab[data-tab="home"]').classList.add('active');
     currentTab = 'home';
+    isSearchMode = false; // 退出搜索模式
     renderSidebar();
-    renderArticle('index.md');
+    // 显示首页下的第一个文件
+    const homeFiles = tree.children.filter(item =>
+      item.type === 'file' && !item.name.toLowerCase().includes('index')
+    );
+    homeFiles.length && renderArticle(homeFiles[0].path);
   });
 
   // 机构标签点击
@@ -290,20 +412,36 @@ function initEventListeners() {
     e.stopPropagation();
     toggleTheme();
   });
+
+  // 搜索事件监听
+  document.getElementById('searchButton').addEventListener('click', handleSearch);
+  document.getElementById('searchInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  // 清除搜索功能
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    if (!e.target.value.trim()) {
+      isSearchMode = false;
+      renderSidebar();
+    }
+  });
 }
 
 // 初始化
-renderNavTabs();
-initEventListeners();
-// 确保在配置加载和DOM就绪后设置机构名称
-fetchSetting().then(() => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await renderNavTabs();
+  initEventListeners();
+  
+  await fetchSetting();
   const orgTab = document.querySelector('.org-tab');
   if (orgTab) {
     orgTab.textContent = globalSetting.orgin || '默认机构';
   }
+  
+  renderSidebar();
+  renderArticle('index.md');
 });
-renderSidebar();
-renderArticle('index.md');
 
 // 设置组织名称
 document.querySelector('.org-tab').textContent = globalSetting.orgin;

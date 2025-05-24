@@ -124,3 +124,43 @@ a:hover {
   color: #4834f6;
   text-decoration: underline;
 }
+
+/* 搜索容器样式 */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 20px;
+}
+
+#searchInput {
+  padding: 5px 12px;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  color: #24292e;
+  font-size: 1em;
+  transition: all 0.3s;
+}
+
+#searchInput:focus {
+  outline: none;
+  border-color: #58a6ff;
+  box-shadow: 0 0 0 2px rgba(88,166,255,0.2);
+}
+
+#searchButton {
+  padding: 5px 15px;
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  color: #24292e;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#searchButton:hover {
+  background: #58a6ff;
+  border-color: #58a6ff;
+  color: #ffffff;
+}
