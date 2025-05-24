@@ -20,3 +20,4 @@ services:
     # Dockerfile 中已经设置了 CHOKIDAR_USEPOLLING=true，这里可以不重复设置
     # environment:
     #   - CHOKIDAR_USEPOLLING=true
+    
