@@ -31,6 +31,110 @@ async function fetchArticle(path) {
   return await response.text();
 }
 
+// 更新URL参数
+function updateURLParam(key, value) {
+  const url = new URL(window.location);
+  if (value) {
+    url.searchParams.set(key, value);
+  } else {
+    url.searchParams.delete(key);
+  }
+  window.history.pushState({}, '', url);
+}
+
+// 根据URL参数初始化页面
+async function initFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const tab = urlParams.get('tab') || 'home';
+  const articlePath = urlParams.get('article');
+
+  // 设置当前选中的标签
+  currentTab = tab;
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  const activeTab = document.querySelector(`.nav-tab[data-tab="${tab}"]`);
+  if (activeTab) activeTab.classList.add('active');
+
+  // 渲染侧边栏和文章
+  await renderSidebar();
+  if (articlePath) {
+      await renderArticle(articlePath);
+  } else if (tab === 'home') {
+      // 优先显示根目录下的index.md
+      await renderArticle('index.md');
+      updateURLParam('article', 'index.md');
+  }
+}
+
+// 预处理函数：去除名称前的阿拉伯数字
+function preprocessName(name) {
+  return name.replace(/^\d+/, '').trim(); // 去除前面的数字并去掉多余的空格
+}
+
+// 渲染侧边栏导航
+async function renderSidebar() {
+  const tree = await fetchFileTree();
+  sidebar.innerHTML = '';
+
+  const renderItems = (items, container = sidebar, level = 1) => {
+    items.forEach(item => {
+      if (item.type === 'file') {
+        const link = document.createElement('div');
+        link.className = 'article-link';
+        link.textContent = preprocessName(item.name.replace('.md', '')); // 使用预处理函数
+        link.addEventListener('click', () => {
+          document.querySelectorAll('.article-link').forEach(el => el.classList.remove('active'));
+          link.classList.add('active');
+          // 移除所有目录的active状态
+          document.querySelectorAll('.category-title').forEach(el => el.classList.remove('active'));
+          renderArticle(item.path); // 直接使用 item.path
+          updateURLParam('article', item.path); // 更新URL参数
+        });
+        container.appendChild(link); // 修改2：使用传入的容器
+      } else if (item.type === 'directory') {
+        // 添加文件夹标题
+        const folderTitle = document.createElement('div');
+        folderTitle.className = `category-title collapsible level-${level}`;
+        folderTitle.textContent = preprocessName(item.name); // 使用预处理函数
+        folderTitle.addEventListener('click', (e) => {
+          e.stopPropagation(); // 阻止事件冒泡
+          
+          const content = folderTitle.nextElementSibling;
+          if (content && content.classList.contains('folder-content')) {
+            // 切换显示状态
+            const isHidden = content.style.display === 'none';
+            content.style.display = isHidden ? 'block' : 'none';
+            folderTitle.classList.toggle('active', isHidden); // 添加/移除 active 状态
+          }
+        });
+        container.appendChild(folderTitle); // 修改3：使用传入的容器
+
+        // 添加文件夹内容容器
+        const folderContent = document.createElement('div');
+        folderContent.className = 'folder-content';
+        folderContent.style.display = 'none'; // 默认折叠
+        container.appendChild(folderContent); // 修改4：使用传入的容器
+
+        // 递归渲染子目录和文件
+        renderItems(item.children, folderContent, level + 1);
+      }
+    });
+  };
+
+  if (currentTab === 'home') {
+    // 只显示.md文件
+    const filesOnly = tree.children.filter(item =>
+      item.type === 'file' && !item.name.toLowerCase().includes('index')
+    );
+    renderItems(filesOnly);
+  } else {
+    // 显示当前分类下的文章
+    const category = tree.children.find(c => c.name === currentTab);
+    if (category) {
+      renderItems(category.children);
+    }
+  }
+}
+
 // 渲染导航标签
 async function renderNavTabs() {
   await fetchSetting(); // 确保设置已加载
@@ -45,19 +149,23 @@ async function renderNavTabs() {
     if (child.type === 'directory') {
       const tab = document.createElement('div');
       tab.className = `nav-tab ${currentTab === child.name ? 'active' : ''}`;
-      tab.textContent = child.name;
+      tab.textContent = preprocessName(child.name); // 使用预处理函数
       tab.dataset.tab = child.name;
       tab.addEventListener('click', () => {
         document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
         tab.classList.add('active');
         currentTab = child.name;
         isSearchMode = false; // 退出搜索模式
+        updateURLParam('tab', currentTab); // 更新URL参数
         renderSidebar();
         // 获取分类下的第一个文件作为默认显示
         const category = tree.children.find(c => c.name === currentTab);
         if (category?.children?.length) {
           const firstFile = category.children.find(item => item.type === 'file');
-          firstFile && renderArticle(firstFile.path);
+          if (firstFile) {
+            renderArticle(firstFile.path);
+            updateURLParam('article', firstFile.path); // 更新URL参数
+          }
         }
       });
       categoryTabs.appendChild(tab);
@@ -102,35 +210,55 @@ function toggleTheme() {
 async function renderSidebar() {
   const tree = await fetchFileTree();
   sidebar.innerHTML = '';
-  
-  const renderItems = (items, parentPath = '') => {
+
+  const renderItems = (items, container = sidebar, level = 1) => {
     items.forEach(item => {
       if (item.type === 'file') {
         const link = document.createElement('div');
         link.className = 'article-link';
-        link.textContent = item.name.replace('.md', '');
+        link.textContent = preprocessName(item.name.replace('.md', ''));
         link.addEventListener('click', () => {
           document.querySelectorAll('.article-link').forEach(el => el.classList.remove('active'));
           link.classList.add('active');
-          renderArticle(parentPath + item.path);
+          // 移除所有目录的active状态
+          document.querySelectorAll('.category-title').forEach(el => el.classList.remove('active'));
+          renderArticle(item.path);
+          updateURLParam('article', item.path);
         });
-        sidebar.appendChild(link);
+        container.appendChild(link);
       } else if (item.type === 'directory') {
-        // 添加分类标题
-        const categoryTitle = document.createElement('div');
-        categoryTitle.className = 'category-title';
-        categoryTitle.textContent = item.name;
-        sidebar.appendChild(categoryTitle);
-        
-        // 递归处理子目录
-        renderItems(item.children, parentPath + item.name + '/');
+        // 添加文件夹标题
+        const folderTitle = document.createElement('div');
+        folderTitle.className = `category-title collapsible level-${level}`;
+        folderTitle.textContent = preprocessName(item.name);
+        folderTitle.addEventListener('click', (e) => {
+          e.stopPropagation(); // 阻止事件冒泡
+          
+          const content = folderTitle.nextElementSibling;
+          if (content && content.classList.contains('folder-content')) {
+            // 切换显示状态
+            const isHidden = content.style.display === 'none';
+            content.style.display = isHidden ? 'block' : 'none';
+            folderTitle.classList.toggle('active', isHidden); // 添加/移除 active 状态
+          }
+        });
+        container.appendChild(folderTitle);
+
+        // 添加文件夹内容容器
+        const folderContent = document.createElement('div');
+        folderContent.className = 'folder-content';
+        folderContent.style.display = 'none';
+        container.appendChild(folderContent);
+
+        // 递归渲染子目录和文件
+        renderItems(item.children, folderContent, level + 1);
       }
     });
   };
 
   if (currentTab === 'home') {
     // 只显示.md文件
-    const filesOnly = tree.children.filter(item => 
+    const filesOnly = tree.children.filter(item =>
       item.type === 'file' && !item.name.toLowerCase().includes('index')
     );
     renderItems(filesOnly);
@@ -138,19 +266,7 @@ async function renderSidebar() {
     // 显示当前分类下的文章
     const category = tree.children.find(c => c.name === currentTab);
     if (category) {
-      category.children.forEach(file => {
-        if (file.type === 'file') {
-          const link = document.createElement('div');
-          link.className = 'article-link';
-          link.textContent = file.name.replace('.md', '');
-          link.addEventListener('click', () => {
-            document.querySelectorAll('.article-link').forEach(el => el.classList.remove('active'));
-            link.classList.add('active');
-            renderArticle(file.path);
-          });
-          sidebar.appendChild(link);
-        }
-      });
+      renderItems(category.children);
     }
   }
 }
@@ -257,20 +373,20 @@ async function renderArticle(path) {
   });
 }
 
-// // 初始化WebSocket连接
-// const socket = new WebSocket(`ws://${window.location.host}`);
+// 初始化WebSocket连接
+const socket = new WebSocket(`ws://${window.location.host}`);
 
-// // 监听WebSocket消息
-// socket.addEventListener('message', (event) => {
-//   const data = JSON.parse(event.data);
-//   if (data.type === 'filetree-update') {
-//     // 文件树有更新，重新渲染界面
-//     renderNavTabs();
-//     if (currentTab === 'home') {
-//       renderSidebar();
-//     }
-//   }
-// });
+// 监听WebSocket消息
+socket.addEventListener('message', (event) => {
+  const data = JSON.parse(event.data);
+  if (data.type === 'filetree-update') {
+    // 文件树有更新，重新渲染界面
+    renderNavTabs();
+    if (currentTab === 'home') {
+      renderSidebar();
+    }
+  }
+});
 
 
 // 搜索功能实现
@@ -330,38 +446,39 @@ async function renderSidebar(results) {
   sidebar.innerHTML = '';
 
   if (isSearchMode) {
-    // 渲染搜索结果
     results.forEach(result => {
       const link = document.createElement('div');
       link.className = 'article-link search-result';
-      link.innerHTML = result.name.replace(new RegExp(currentSearchKeyword, 'gi'), match =>
+      const processedName = preprocessName(result.name);
+      link.innerHTML = processedName.replace(new RegExp(currentSearchKeyword, 'gi'), match =>
         `<span class="highlight">${match}</span>`
       );
       link.addEventListener('click', () => {
         document.querySelectorAll('.article-link').forEach(el => el.classList.remove('active'));
         link.classList.add('active');
         renderArticle(result.path);
+        updateURLParam('article', result.path); // 更新URL参数
       });
       sidebar.appendChild(link);
     });
   } else {
-    // 原始渲染逻辑
     const renderItems = (items, parentPath = '') => {
       items.forEach(item => {
         if (item.type === 'file') {
           const link = document.createElement('div');
           link.className = 'article-link';
-          link.textContent = item.name.replace('.md', '');
+          link.textContent = preprocessName(item.name.replace('.md', ''));
           link.addEventListener('click', () => {
             document.querySelectorAll('.article-link').forEach(el => el.classList.remove('active'));
             link.classList.add('active');
-            renderArticle(parentPath + item.path);
+            renderArticle(item.path); // 直接使用 item.path
+            updateURLParam('article', item.path); // 更新URL参数
           });
           sidebar.appendChild(link);
         } else if (item.type === 'directory') {
           const categoryTitle = document.createElement('div');
           categoryTitle.className = 'category-title';
-          categoryTitle.textContent = item.name;
+          categoryTitle.textContent = preprocessName(item.name);
           sidebar.appendChild(categoryTitle);
           renderItems(item.children, parentPath + item.name + '/');
         }
@@ -385,17 +502,16 @@ async function renderSidebar(results) {
 // 初始化事件监听（合并版本）
 function initEventListeners() {
   // 原有导航标签事件监听
-  document.querySelector('.nav-tab[data-tab="home"]').addEventListener('click', () => {
+  document.querySelector('.nav-tab[data-tab="home"]').addEventListener('click', async () => {
     document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
     document.querySelector('.nav-tab[data-tab="home"]').classList.add('active');
     currentTab = 'home';
     isSearchMode = false; // 退出搜索模式
-    renderSidebar();
-    // 显示首页下的第一个文件
-    const homeFiles = tree.children.filter(item =>
-      item.type === 'file' && !item.name.toLowerCase().includes('index')
-    );
-    homeFiles.length && renderArticle(homeFiles[0].path);
+    await renderSidebar();
+    
+    // 显示根目录下的index.md
+    await renderArticle('index.md');
+    updateURLParam('article', 'index.md');
   });
 
   // 机构标签点击
@@ -432,15 +548,12 @@ function initEventListeners() {
 document.addEventListener('DOMContentLoaded', async () => {
   await renderNavTabs();
   initEventListeners();
-  
   await fetchSetting();
   const orgTab = document.querySelector('.org-tab');
   if (orgTab) {
     orgTab.textContent = globalSetting.orgin || '默认机构';
   }
-  
-  renderSidebar();
-  renderArticle('index.md');
+  await initFromURL(); // 根据URL参数初始化页面
 });
 
 // 设置组织名称
