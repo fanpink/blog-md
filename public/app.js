@@ -373,8 +373,8 @@ async function renderArticle(path) {
   });
 }
 
-// 初始化WebSocket连接
-const socket = new WebSocket(`ws://${window.location.host}`);
+// // 初始化WebSocket连接
+// const socket = new WebSocket(`ws://${window.location.host}`);
 
 // // 监听WebSocket消息
 // socket.addEventListener('message', (event) => {
