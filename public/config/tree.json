@@ -93,6 +93,47 @@
           "name": "思维导图.md",
           "type": "file",
           "path": "测试\\思维导图.md"
+        },
+        {
+          "name": "技术",
+          "type": "directory",
+          "children": [
+            {
+              "name": "001gitea配置记录.md",
+              "type": "file",
+              "path": "测试\\技术\\001gitea配置记录.md"
+            },
+            {
+              "name": "002技术.md",
+              "type": "file",
+              "path": "测试\\技术\\002技术.md"
+            },
+            {
+              "name": "003powershell脚本生成tree.json.md",
+              "type": "file",
+              "path": "测试\\技术\\003powershell脚本生成tree.json.md"
+            },
+            {
+              "name": "003shell脚本生成tree.json.md",
+              "type": "file",
+              "path": "测试\\技术\\003shell脚本生成tree.json.md"
+            },
+            {
+              "name": "latex测试.md",
+              "type": "file",
+              "path": "测试\\技术\\latex测试.md"
+            },
+            {
+              "name": "php脚本实现生成tree.json.md",
+              "type": "file",
+              "path": "测试\\技术\\php脚本实现生成tree.json.md"
+            },
+            {
+              "name": "python脚本生成tree.json.md",
+              "type": "file",
+              "path": "测试\\技术\\python脚本生成tree.json.md"
+            }
+          ]
         }
       ]
     }

@@ -4,6 +4,7 @@ package-lock.json
 config/tree.json
 
 # Environment files
+.trae
 .env
 .env.local
 .env.development.local
