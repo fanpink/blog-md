@@ -34,7 +34,7 @@ if (!is_dir($configPath)) {
 }
 
 // 构建子目录结构函数
-function buildTree($dir) {
+function buildTree($dir, $contentsPath) {
     $node = [
         'name' => basename($dir),
         'type' => 'directory',
@@ -47,9 +47,15 @@ function buildTree($dir) {
 
         $fullPath = $dir . '/' . $item;
         if (is_dir($fullPath)) {
-            $node['children'][] = buildTree($fullPath);
+            $subNode = buildTree($fullPath, $contentsPath);
+            if (!empty($subNode)) {
+                $node['children'][] = $subNode;
+            }
         } elseif (pathinfo($item, PATHINFO_EXTENSION) === 'md') {
-            $relativePath = str_replace(dirname(__DIR__) . '/', '', realpath($fullPath));
+            // 获取相对于 contents 的路径
+            $relativePath = str_replace($contentsPath . DIRECTORY_SEPARATOR, '', $fullPath);
+            $relativePath = str_replace('\\', '/', $relativePath); // 统一为正斜杠路径
+
             $node['children'][] = [
                 'name' => $item,
                 'type' => 'file',
@@ -68,18 +74,22 @@ $tree = [
     'children' => []
 ];
 
+// 遍历 contents 目录下的所有项目
 $contentsItems = scandir($contentsPath);
 foreach ($contentsItems as $item) {
     if ($item === '.' || $item === '..') continue;
 
     $fullPath = $contentsPath . '/' . $item;
     if (is_dir($fullPath)) {
-        $tree['children'][] = buildTree($fullPath);
+        $tree['children'][] = buildTree($fullPath, $contentsPath);
     } elseif (pathinfo($item, PATHINFO_EXTENSION) === 'md') {
+        $relativePath = str_replace($contentsPath . DIRECTORY_SEPARATOR, '', $fullPath);
+        $relativePath = str_replace('\\', '/', $relativePath); // 统一为正斜杠路径
+
         $tree['children'][] = [
             'name' => $item,
             'type' => 'file',
-            'path' => $item
+            'path' => $relativePath
         ];
     }
 }
