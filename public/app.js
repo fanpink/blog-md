@@ -27,7 +27,11 @@ async function fetchFileTree() {
 
 // 从服务器获取文章内容
 async function fetchArticle(path) {
-  const response = await fetch(`contents/${path}`);
+  // 修正：避免重复拼接路径，仅保留一次 contents/ 前缀
+  const cleanPath = path.replace(/^(public\/)?contents\//, '');  // 移除可能存在的重复路径前缀
+  const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
+  const relativePath = `${basePath}contents/${cleanPath}`;
+  const response = await fetch(relativePath);
   return await response.text();
 }
 
@@ -86,10 +90,10 @@ async function renderSidebar() {
           link.classList.add('active');
           // 移除所有目录的active状态
           document.querySelectorAll('.category-title').forEach(el => el.classList.remove('active'));
-          renderArticle(item.path); // 直接使用 item.path
+          renderArticle(item.path); // 确保直接使用 item.path，无需额外拼接
           updateURLParam('article', item.path); // 更新URL参数
         });
-        container.appendChild(link); // 修改2：使用传入的容器
+        container.appendChild(link);
       } else if (item.type === 'directory') {
         // 添加文件夹标题
         const folderTitle = document.createElement('div');
