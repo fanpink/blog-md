@@ -27,11 +27,7 @@ async function fetchFileTree() {
 
 // 从服务器获取文章内容
 async function fetchArticle(path) {
-  // 修正：避免重复拼接路径，仅保留一次 contents/ 前缀
-  const cleanPath = path.replace(/^(public\/)?contents\//, '');  // 移除可能存在的重复路径前缀
-  const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
-  const relativePath = `${basePath}contents/${cleanPath}`;
-  const response = await fetch(relativePath);
+  const response = await fetch(`contents/${path}`);
   return await response.text();
 }
 
