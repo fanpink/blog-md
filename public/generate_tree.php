@@ -23,18 +23,35 @@ echo "<!DOCTYPE html>
 // 刷新输出，确保用户看到提示
 flush();
 
-// 定义路径（基于当前脚本所在目录）
+// 添加状态输出的辅助函数
+function outputStatus($message, $type = 'info') {
+    $color = $type === 'success' ? '#28a745' : ($type === 'error' ? '#dc3545' : '#17a2b8');
+    echo "<div style='margin: 10px 0; padding: 10px; background-color: {$color}; color: white; border-radius: 4px;'>{$message}</div>";
+    flush();
+}
+
+// 修改路径定义部分
 $basePath = __DIR__;
 $contentsPath = $basePath . '/contents';
 $configPath = $basePath . '/config';
 
-// 确保 config 目录存在
+// 检查并创建 config 目录
 if (!is_dir($configPath)) {
     mkdir($configPath, 0777, true);
+    outputStatus("配置目录创建成功：{$configPath}", 'success');
 }
+
+// 检查 contents 目录是否存在
+if (!is_dir($contentsPath)) {
+    outputStatus("错误：contents 目录不存在！", 'error');
+    exit();
+}
+outputStatus("开始扫描目录：{$contentsPath}");
 
 // 构建子目录结构函数
 function buildTree($dir, $contentsPath) {
+    outputStatus("正在扫描目录：" . basename($dir));
+
     $node = [
         'name' => basename($dir),
         'type' => 'directory',
@@ -76,32 +93,46 @@ $tree = [
 
 // 遍历 contents 目录下的所有项目
 $contentsItems = scandir($contentsPath);
+$fileCount = 0;
+$dirCount = 0;
+
 foreach ($contentsItems as $item) {
     if ($item === '.' || $item === '..') continue;
 
     $fullPath = $contentsPath . '/' . $item;
     if (is_dir($fullPath)) {
         $tree['children'][] = buildTree($fullPath, $contentsPath);
+        $dirCount++;
     } elseif (pathinfo($item, PATHINFO_EXTENSION) === 'md') {
         $relativePath = str_replace($contentsPath . DIRECTORY_SEPARATOR, '', $fullPath);
-        $relativePath = str_replace('\\', '/', $relativePath); // 统一为正斜杠路径
-
+        $relativePath = str_replace('\\', '/', $relativePath);
+        
         $tree['children'][] = [
             'name' => $item,
             'type' => 'file',
             'path' => $relativePath
         ];
+        $fileCount++;
     }
 }
 
-// 写入 JSON 文件（注意这里加入了 JSON_UNESCAPED_UNICODE）
-$outputFile = $configPath . '/tree.json';
-file_put_contents($outputFile, json_encode($tree, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+outputStatus("目录扫描完成！总计：{$dirCount} 个目录，{$fileCount} 个 Markdown 文件", 'success');
 
-// 显示完成信息，并准备跳转
+// 写入 JSON 文件
+$outputFile = $configPath . '/tree.json';
+try {
+    if (file_put_contents($outputFile, json_encode($tree, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE))) {
+        outputStatus("文件树已成功写入：{$outputFile}", 'success');
+    } else {
+        outputStatus("写入文件失败！", 'error');
+    }
+} catch (Exception $e) {
+    outputStatus("写入文件时发生错误：" . $e->getMessage(), 'error');
+}
+
+// 修改完成跳转代码
 echo "<script>
-    document.querySelector('.loading').textContent = '✅ 文件树已生成完毕，即将跳转...';
     setTimeout(function() {
         window.location.href = 'index.html';
-    }, 1000);
+    }, 5000); // 延长等待时间到3秒
 </script></body></html>";
