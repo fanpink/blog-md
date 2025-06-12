@@ -49,7 +49,7 @@ html, body {
 }
 
 .auto-margin {
-  margin-left: auto;
+  margin-left: 0; /* 移除左边距 */
 }
 
 .org-tab {
@@ -144,7 +144,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: 20px;
+  margin-left: auto; /* 改为auto实现靠右对齐 */
 }
 
 #searchInput {
@@ -177,4 +177,21 @@ a:hover {
   background: #58a6ff;
   border-color: #58a6ff;
   color: #ffffff;
+}
+
+.print-btn {
+  cursor: pointer;
+  color: #c9d1d9;
+  transition: color 0.3s;
+}
+
+.print-btn:hover {
+  color: #58a6ff;
+}
+
+.right-align-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 10px; /* 控制元素间距 */
 }

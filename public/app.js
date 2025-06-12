@@ -542,6 +542,84 @@ function initEventListeners() {
       renderSidebar();
     }
   });
+
+  // 打印功能
+  function handlePrint() {
+    const mainContent = document.getElementById('mainContent');
+    const printWindow = window.open('', '_blank');
+    const scrollTop = mainContent.scrollTop;
+    
+    // 临时移除滚动和高度限制
+    mainContent.style.overflow = 'visible';
+    mainContent.style.height = 'auto';
+    
+    // 替换iframe的src为绝对路径
+    const contentHtml = mainContent.innerHTML.replace(/src="\/([^"]+)"/g, 'src="' + window.location.origin + '/$1"');
+    
+    // 创建打印页面的HTML
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>打印预览</title>
+        <style>
+          body {
+            padding: 20px;
+            background-color: white;
+            color: black;
+          }
+          .main-content {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+            margin: 0;
+          }
+          @media print {
+            @page {
+              size: auto;
+              margin: 20mm;
+            }
+            body {
+              background-color: white !important;
+              color: black !important;
+            }
+            .main-content {
+              background-color: white !important;
+              color: black !important;
+            }
+            img, pre, code {
+              page-break-inside: avoid;
+              max-width: 100% !important;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="main-content">
+          ${contentHtml}
+        </div>
+        <script>
+          window.onload = function() {
+            window.print();
+            window.onafterprint = function() {
+              window.close();
+            };
+          };
+        </script>
+      </body>
+      </html>
+    `);
+    
+    // 恢复原始滚动设置
+    mainContent.style.overflow = 'auto';
+    mainContent.style.height = 'calc(100vh - 4px - 90px)';
+    mainContent.scrollTop = scrollTop;
+    
+    printWindow.document.close();
+  }
+
+  // 修改打印功能事件监听
+  document.getElementById('printBtn').addEventListener('click', handlePrint);
 }
 
 // 初始化
